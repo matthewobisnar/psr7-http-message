@@ -244,7 +244,7 @@ class Uri implements UriInterface
      * @return string rawurlencoded path.
      * @throws \Excpetion If the path is invalid.
      */
-    protected function filterQuery($path)
+    protected function filterQueryAndFragment($path)
     {
         if (!is_string($path)) {
             throw new \Exception(sprintf("[ %s ] path must be type string. ( %s ) is given in %s",
@@ -313,10 +313,6 @@ class Uri implements UriInterface
         $authority = "";
         $host = preg_replace ('/^[\w\W]\./', '', $this->getHost());
         
-        if (empty($host)) {
-            return "";
-        }
-
         if (!empty($this->getUserInfo())) {
             $authority .= $this->getUserInfo() . "@" . $host;      
         }
@@ -587,7 +583,10 @@ class Uri implements UriInterface
      */
     public function withPort($port)
     {
-        if (!is_null($this->requiredInt($port))) {
+        if (!is_null($port)) {
+
+            $port = $this->requiredInt($port);
+
             if ($this->php_url_port === strtolower($port)) {
                 return $this;
             }
@@ -654,7 +653,7 @@ class Uri implements UriInterface
     public function withQuery($query)
     {
         if (!empty($query)) {
-            $query = $this->filterQuery($query);
+            $query = $this->filterQueryAndFragment($query);
 
             if ($this->getQuery() === strtolower($query)) {
                 return $this;
@@ -682,9 +681,9 @@ class Uri implements UriInterface
      */
     public function withFragment($fragment)
     {
+        if (!empty($fragment)) {
+            $fragment = $this->filterQueryAndFragment($fragment);
 
-        if (!empty($this->requiredString($fragment))) {
-            
             if ($this->php_url_fragment === strtolower($fragment)) {
                 return $this;
             }
