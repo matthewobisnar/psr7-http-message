@@ -1,0 +1,12 @@
+{
+    "name":"psr-7-http/psr-7-http",
+    "description":"psr",
+    "autoload":{
+        "psr-4":{
+            "http\\": "src/http"
+        }
+    },
+    "require": {
+        "psr/http-message": "^1.0"
+    }
+}
