@@ -489,10 +489,6 @@ class Uri implements UriInterface
      */
     public function withScheme($scheme)
     {
-        if (empty($scheme)) {
-            $this->php_url_scheme = '';
-        }
-
         if (!empty($scheme)) {
 
             if ($this->php_url_scheme === strtolower($scheme)) {
@@ -500,7 +496,7 @@ class Uri implements UriInterface
             }
 
             if (in_array(strtolower($scheme), self::DEFAULT_PORT)) {
-                $this->php_url_scheme = strtolower($scheme);
+                $scheme = strtolower($scheme);
             } else {
                 throw new \Exception(
                         sprintf("[ %s ] is not a valid url scheme in function %s", 
@@ -511,7 +507,7 @@ class Uri implements UriInterface
         }
 
         $new = clone $this;
-
+        $new->php_url_scheme = $scheme;
         return $new;
     }
 
@@ -531,18 +527,9 @@ class Uri implements UriInterface
      */
     public function withUserInfo($user, $password = null)
     {
-        if (!empty($user)) {
-            $this->php_url_user = $user;
-            $this->php_url_pass = $password;
-        }
-
-        if (!empty($user)) {
-            $this->php_url_user = '';
-            $this->php_url_pass = '';
-        }
-
         $new = clone $this;
-
+        $new->php_url_user = $user;
+        $new->php_url_password = $password;
         return $new;
     }
 
@@ -561,10 +548,6 @@ class Uri implements UriInterface
     public function withHost($host)
     {
 
-        if (empty($host)) {
-            $this->php_url_host = '';
-        }
-
         if (!empty($this->requiredString($host))) {
 
             if ($this->php_url_host === strtolower($host)) {
@@ -572,7 +555,7 @@ class Uri implements UriInterface
             }
 
             if (filter_var(gethostbyname($host), FILTER_VALIDATE_IP)) {
-                $this->php_url_host = strtolower($host);
+                $host = strtolower($host);
             } else {
                 throw new \Exception(sprintf("[ %s ] is invalid hostname.", $host));
             }
@@ -580,7 +563,7 @@ class Uri implements UriInterface
         }
 
         $new = clone $this;
-
+        $new->php_url_host = $host;
         return $new;
     
     }
@@ -605,20 +588,13 @@ class Uri implements UriInterface
     public function withPort($port)
     {
         if (!is_null($this->requiredInt($port))) {
-
             if ($this->php_url_port === strtolower($port)) {
                 return $this;
             }
-
-            $this->php_url_port = $port;
-        }
-
-        if (is_null($port)) {
-           $this->php_url_port = null;
         }
 
         $new = clone $this;
-        
+        $new->php_url_port = is_null($port) ? null : $port;
         return $new;
     }
 
@@ -647,10 +623,6 @@ class Uri implements UriInterface
     public function withPath($path)
     {
 
-        if (empty($path)) {
-            $this->php_url_path = '';
-        }
-
         if (!empty($path)) {
             $path = $this->filterPath($path);
 
@@ -660,7 +632,7 @@ class Uri implements UriInterface
         }
 
         $new = clone $this;
-
+        $new->php_url_path = $path;
         return $new;
     }
 
@@ -681,22 +653,16 @@ class Uri implements UriInterface
      */
     public function withQuery($query)
     {
-        if (empty($query)) {
-            $this->php_url_query = '';
-        }
-
         if (!empty($query)) {
             $query = $this->filterQuery($query);
 
             if ($this->getQuery() === strtolower($query)) {
                 return $this;
             }
-
-            $this->php_url_query = $query;
         }
         
         $new = clone $this;
-
+        $new->php_url_query = $query;
         return $new;
     }
 
@@ -716,9 +682,6 @@ class Uri implements UriInterface
      */
     public function withFragment($fragment)
     {
-        if (empty($fragment)) {
-            $this->php_url_fragment = '';
-        }
 
         if (!empty($this->requiredString($fragment))) {
             
@@ -726,11 +689,11 @@ class Uri implements UriInterface
                 return $this;
             }
 
-            $this->php_url_fragment = rawurlencode($fragment);
+            $fragment = rawurlencode($fragment);
         }
 
         $new = clone $this;
-
+        $new->php_url_fragment = $fragment;
         return $new;
     }
 
@@ -759,6 +722,6 @@ class Uri implements UriInterface
      */
     public function __toString()
     {
-
+        
     }
 }
