@@ -72,7 +72,7 @@ class Uri implements UriInterface
      * 
      * php_url_scheme   => holds http|https of  url.
      * php_url_user     => holds userInfo of url.
-     * php_url_pass     =>
+     * php_url_pass     => 
      * php_url_host     => holds host of the url.
      * php_url_port     => holds url port 80|443.
      * php_url_path     => holds url path.
@@ -104,9 +104,17 @@ class Uri implements UriInterface
                 foreach (self::PARSE_URL_CONSTANTS as $key_name => $url_constant) {
 
                     if (is_int($this->{strtolower($key_name)})) {
+                   
                         $this->{strtolower($key_name)} = (parse_url($url, $url_constant) ?? null);
-                    } else {
-                        $this->{strtolower($key_name)} = (strtolower(parse_url($url, $url_constant)) ?? '');
+                    
+                    } elseif (is_string($this->{strtolower($key_name)})) {
+                   
+                        if ($key_name === 'PHP_URL_PASS') {
+                            $this->{strtolower($key_name)} = (parse_url($url, $url_constant) ?? '');
+                        } else {
+                            $this->{strtolower($key_name)} = (strtolower(parse_url($url, $url_constant)) ?? '');
+                        }
+                   
                     }
 
                 }        
@@ -126,7 +134,7 @@ class Uri implements UriInterface
      * @param string
      * @return int
      */
-    public function requiredString($paramString)
+    protected function requiredString($paramString)
     {
         if (!is_string($paramString)) {
 
@@ -150,7 +158,6 @@ class Uri implements UriInterface
     protected function requiredInt($paramInt)
     {
         if (!is_int($paramInt)) {
-
             throw new \Exception(
                     sprintf("[ %s ] must be a valid integer. Type ( %s ) is given. in %s ", 
                     $paramInt, gettype($paramInt), __METHOD__
@@ -255,7 +262,7 @@ class Uri implements UriInterface
 
         return preg_replace_callback(
             '/(?:[^' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . '%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/',
-            [$this, 'rawurlencodeMatchZero'],
+            [$this, 'urlencodeMatchZero'],
             $path
         );
     }
@@ -269,6 +276,17 @@ class Uri implements UriInterface
     protected function rawurlencodeMatchZero ($matches) 
     {
         return rawurlencode($matches[0]);
+    }
+
+        /**
+     * Filters the query
+     *
+     * @param mixed $query
+     * @return string rawurlencoded path.
+     */
+    protected function urlencodeMatchZero ($matches) 
+    {
+        return urlencode($matches[0]);
     }
 
     /**
@@ -311,7 +329,7 @@ class Uri implements UriInterface
     public function getAuthority()
     {
         $authority = "";
-        $host = preg_replace ('/^[\w\W]\./', '', $this->getHost());
+        $host = preg_replace ('/^[\w\d\W]\./', '', $this->getHost());
         
         if (!empty($this->getUserInfo())) {
             $authority .= $this->getUserInfo() . "@" . $host;      
@@ -363,7 +381,7 @@ class Uri implements UriInterface
      */
     public function getHost()
     {
-        return $this->php_url_host;
+        return strtolower($this->php_url_host);
     }
 
     /**
@@ -444,7 +462,7 @@ class Uri implements UriInterface
      */
     public function getQuery()
     {
-        return rawurlencode($this->php_url_query);
+        return urlencode($this->php_url_query);
     }
 
     /**
@@ -465,7 +483,7 @@ class Uri implements UriInterface
      */
     public function getFragment()
     {
-        return rawurlencode($this->php_url_fragment);
+        return urlencode($this->php_url_fragment);
     }
 
     /**
@@ -523,6 +541,11 @@ class Uri implements UriInterface
      */
     public function withUserInfo($user, $password = null)
     {
+        if ($this->php_url_user == $user 
+            && $this->php_url_password == $password) {
+            return $this;
+        }
+        
         $new = clone $this;
         $new->php_url_user = $user;
         $new->php_url_password = $password;
@@ -584,6 +607,10 @@ class Uri implements UriInterface
     public function withPort($port)
     {
         if (!is_null($port)) {
+            
+            if (is_numeric($port)) {
+                $port = $this->convertToInt($port);
+            }
 
             $port = $this->requiredInt($port);
 
@@ -621,7 +648,6 @@ class Uri implements UriInterface
      */
     public function withPath($path)
     {
-
         if (!empty($path)) {
             $path = $this->filterPath($path);
 
@@ -687,8 +713,6 @@ class Uri implements UriInterface
             if ($this->php_url_fragment === strtolower($fragment)) {
                 return $this;
             }
-
-            $fragment = rawurlencode($fragment);
         }
 
         $new = clone $this;
