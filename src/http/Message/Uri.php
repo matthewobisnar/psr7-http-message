@@ -50,7 +50,8 @@ class Uri implements UriInterface
     private const DEFAULT_PORT = [
         80   => "http", 
         8080 => "http", 
-        443  => "https"
+        443  => "https",
+        21   => "ftp"
     ];
 
     /**
@@ -120,7 +121,7 @@ class Uri implements UriInterface
                 }        
             } else {
                 throw new \Exception(
-                        sprintf("[ %s ] => Invalid domain passed in %s", 
+                    sprintf("[ %s ] => Invalid domain passed in %s", 
                         $url, static::class
                     )
                 );
@@ -139,7 +140,7 @@ class Uri implements UriInterface
         if (!is_string($paramString)) {
 
             throw new \Exception(
-                    sprintf("[ %s ] must be a valid string. Type ( %s ) is given in %s.", 
+                sprintf("[ %s ] must be a valid string. Type ( %s ) is given in %s.", 
                     json_encode($paramString), gettype($paramString), __METHOD__
                 )
             );
@@ -159,7 +160,7 @@ class Uri implements UriInterface
     {
         if (!is_int($paramInt)) {
             throw new \Exception(
-                    sprintf("[ %s ] must be a valid integer. Type ( %s ) is given. in %s ", 
+                sprintf("[ %s ] must be a valid integer. Type ( %s ) is given. in %s ", 
                     $paramInt, gettype($paramInt), __METHOD__
                 )
             );
@@ -329,10 +330,12 @@ class Uri implements UriInterface
     public function getAuthority()
     {
         $authority = "";
-        $host = preg_replace ('/^[\w\d\W]\./', '', $this->getHost());
+        $host = preg_replace ('/^www\./i', '', $this->getHost());
         
         if (!empty($this->getUserInfo())) {
-            $authority .= $this->getUserInfo() . "@" . $host;      
+            $authority .= $this->getUserInfo() . "@" . $host; 
+        } else {
+            $authority .= $host;
         }
 
         if (!is_null($this->getPort())) {
@@ -745,6 +748,30 @@ class Uri implements UriInterface
      */
     public function __toString()
     {
-        
+        $uri = '';
+
+        if (!empty($this->getScheme())) {
+            $uri .= $this->getScheme() . "://";
+        }
+
+        if (!empty($this->getAuthority())) {
+            $uri .= $this->getAuthority();
+        } else {
+            $uri .= $this->getHost();
+        }
+
+        if (!empty($this->getPath())) {
+            $uri .= rawurldecode(preg_replace('/^\/+/', '\/', $this->getPath()));
+        }
+       
+        if (!empty($this->getQuery())) {
+            $uri .= "?" . rawurldecode($this->getQuery());
+        }
+
+        if (!empty($this->getFragment())) {
+            $uri .= "#" . rawurldecode($this->getFragment());
+        }
+
+        return $uri;
     }
 }

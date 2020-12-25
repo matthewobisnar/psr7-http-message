@@ -2,7 +2,7 @@
 namespace http\Message\Abstracts;
 
 use Psr\Http\Message\StreamInterface;
-
+use Psr\Http\Message\MessageInterface;
 /**
  * HTTP messages consist of requests from a client to a server and responses
  * from a server to a client. This interface defines the methods common to
@@ -16,7 +16,7 @@ use Psr\Http\Message\StreamInterface;
  * @link http://www.ietf.org/rfc/rfc7231.txt
  */
 
-abstract class Message
+abstract class Message implements MessageInterface
 {
 
     /**
@@ -69,8 +69,7 @@ abstract class Message
      */
     public function withProtocolVersion($version)
     {
-        if ($this->protocolVersion = $version) 
-        {
+        if ($this->protocolVersion == $version) {
             return $this;
         }
 
