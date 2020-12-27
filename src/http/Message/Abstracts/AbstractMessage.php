@@ -18,7 +18,7 @@ use http\Message\Traits\UtilitiesTraits;
  * @link http://www.ietf.org/rfc/rfc7231.txt
  */
 
-abstract class Message implements MessageInterface
+abstract class AbstractMessage implements MessageInterface
 {
     /**
      * 

@@ -1,8 +1,8 @@
 <?php
 namespace http\Message;
 
-use http\Message\Abstracts\Message;
 use Psr\Http\Message\ResponseInterface;
+use http\Message\Abstracts\AbstractMessage;
 
 /**
  * Representation of an outgoing, server-side response.
@@ -19,7 +19,7 @@ use Psr\Http\Message\ResponseInterface;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-final class Response extends Message implements ResponseInterface
+final class Response extends AbstractMessage implements ResponseInterface
 {
     /**
      * Gets the response status code.

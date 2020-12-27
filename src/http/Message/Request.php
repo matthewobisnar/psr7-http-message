@@ -3,7 +3,7 @@ namespace http\Message;
 
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
-use http\Message\Abstracts\Message;
+use http\Message\Abstracts\AbstractMessage;
 
 /**
  * Representation of an outgoing, client-side request.
@@ -24,7 +24,7 @@ use http\Message\Abstracts\Message;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-final class Request extends Message implements RequestInterface
+final class Request extends AbstractMessage implements RequestInterface
 {
 
     /**
