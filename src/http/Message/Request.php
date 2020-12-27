@@ -26,6 +26,7 @@ use http\Message\Abstracts\Message;
  */
 final class Request extends Message implements RequestInterface
 {
+
     /**
      * Retrieves the message's request target.
      *
@@ -76,7 +77,7 @@ final class Request extends Message implements RequestInterface
      */
     public function getMethod()
     {
-        
+
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace http\Message;
 
 use Psr\Http\Message\UriInterface;
+use http\Message\Traits\UtilitiesTraits;
 
 /**
  * Value object representing a URI.
@@ -25,6 +26,13 @@ use Psr\Http\Message\UriInterface;
  */
 class Uri implements UriInterface
 {
+
+    /**
+     * Generic methods
+     * 
+     * @type traits
+     */
+    use UtilitiesTraits;
 
     /**
      * Parse_url constants
@@ -130,69 +138,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * Validate date Type string.
-     * 
-     * @param string
-     * @return int
-     */
-    protected function requiredString($paramString)
-    {
-        if (!is_string($paramString)) {
-
-            throw new \Exception(
-                sprintf("[ %s ] must be a valid string. Type ( %s ) is given in %s.", 
-                    json_encode($paramString), gettype($paramString), __METHOD__
-                )
-            );
-
-        }
-
-        return $paramString;
-    }
-
-    /**
-     * Validate date Type int.
-     * 
-     * @param string
-     * @return int
-     */
-    protected function requiredInt($paramInt)
-    {
-        if (!is_int($paramInt)) {
-            throw new \Exception(
-                sprintf("[ %s ] must be a valid integer. Type ( %s ) is given. in %s ", 
-                    $paramInt, gettype($paramInt), __METHOD__
-                )
-            );
-
-        }
-
-        return $paramInt;
-    } 
-
-    /**
-     * Convert to parameter to integer
-     * 
-     * @param mixed
-     * @return int
-     */
-    protected function convertToInt($param)
-    {
-        return !is_int($param) ? (int) $param : (empty($param) ? null : $param);
-    }
-
-    /**
-     * Convert to parameter to string
-     * 
-     * @param mixed
-     * @return string
-     */
-    protected function convertToString($param)
-    {
-        return !is_string($param) ? (string) $param : $param;
-    }
-
-    /**
      * Get public access list of parsed url
      * 
      * @param void
@@ -231,7 +176,7 @@ class Uri implements UriInterface
     protected function filterPath($path)
     {
         if (!is_string($path)) {
-            throw new \Exception(sprintf("[ %s ] path must be type string. ( %s ) is given in %s",
+            throw new \InvalidArgumentException(sprintf("[ %s ] path must be type string. ( %s ) is given in %s",
                     json_encode($path), gettype($path), __METHOD__ 
                 )
             );
@@ -255,7 +200,7 @@ class Uri implements UriInterface
     protected function filterQueryAndFragment($path)
     {
         if (!is_string($path)) {
-            throw new \Exception(sprintf("[ %s ] path must be type string. ( %s ) is given in %s",
+            throw new \InvalidArgumentException(sprintf("[ %s ] path must be type string. ( %s ) is given in %s",
                     json_encode($path), gettype($path), __METHOD__ 
                 )
             );
@@ -440,7 +385,8 @@ class Uri implements UriInterface
      */
     public function getPath()
     {
-        return rawurlencode($this->php_url_path);
+       $path = preg_replace('/^[\/]*/', "/", $this->php_url_path);
+        return $path;
     }
 
     /**
@@ -515,7 +461,7 @@ class Uri implements UriInterface
             if (in_array(strtolower($scheme), self::DEFAULT_PORT)) {
                 $scheme = strtolower($scheme);
             } else {
-                throw new \Exception(
+                throw new \InvalidArgumentException(
                         sprintf("[ %s ] is not a valid url scheme in function %s", 
                         $scheme, __METHOD__
                     )
@@ -579,7 +525,8 @@ class Uri implements UriInterface
             if (filter_var(gethostbyname($host), FILTER_VALIDATE_IP)) {
                 $host = strtolower($host);
             } else {
-                throw new \Exception(sprintf("[ %s ] is invalid hostname.", $host));
+                throw new \InvalidArgumentException
+                (sprintf("[ %s ] is invalid hostname.", $host));
             }
 
         }
@@ -774,7 +721,7 @@ class Uri implements UriInterface
         }
 
         if (!empty($this->getPath())) {
-            $uri .= rawurldecode(preg_replace('/^\/+/', '\/', $this->getPath()));
+            $uri .= rawurldecode(preg_replace('/^\/+/', '/', $this->getPath()));
         }
        
         if (!empty($this->getQuery())) {
