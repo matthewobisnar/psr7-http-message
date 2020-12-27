@@ -239,7 +239,7 @@ abstract class Message implements MessageInterface
     public function getBody()
     {
 
-    }
+    } 
 
     /**
      * Return an instance with the specified message body.
@@ -256,6 +256,6 @@ abstract class Message implements MessageInterface
      */
     public function withBody(StreamInterface $body)
     {
-
+        
     }
 }

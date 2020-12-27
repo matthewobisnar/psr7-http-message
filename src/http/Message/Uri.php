@@ -504,7 +504,7 @@ class Uri implements UriInterface
      * @return static A new instance with the specified scheme.
      * @throws \InvalidArgumentException for invalid or unsupported schemes.
      */
-    public function withScheme($scheme)
+    public function withScheme($scheme) : self
     {
         if (!empty($scheme)) {
 
@@ -542,7 +542,7 @@ class Uri implements UriInterface
      * @param null|string $password The password associated with $user.
      * @return static A new instance with the specified user information.
      */
-    public function withUserInfo($user, $password = null)
+    public function withUserInfo($user, $password = null) : self
     {
         if ($this->php_url_user == $user 
             && $this->php_url_password == $password) {
@@ -567,7 +567,7 @@ class Uri implements UriInterface
      * @return static A new instance with the specified host.
      * @throws \InvalidArgumentException for invalid hostnames.
      */
-    public function withHost($host)
+    public function withHost($host) :self
     {
 
         if (!empty($this->requiredString($host))) {
@@ -607,7 +607,7 @@ class Uri implements UriInterface
      * @return static A new instance with the specified port.
      * @throws \InvalidArgumentException for invalid ports.
      */
-    public function withPort($port)
+    public function withPort($port) : self
     {
         if (!is_null($port)) {
             
@@ -649,7 +649,7 @@ class Uri implements UriInterface
      * @return static A new instance with the specified path.
      * @throws \InvalidArgumentException for invalid paths.
      */
-    public function withPath($path)
+    public function withPath($path) : self
     {
         if (!empty($path)) {
             $path = $this->filterPath($path);
@@ -679,7 +679,7 @@ class Uri implements UriInterface
      * @return static A new instance with the specified query string.
      * @throws \InvalidArgumentException for invalid query strings.
      */
-    public function withQuery($query)
+    public function withQuery($query) : self
     {
         if (!empty($query)) {
             $query = $this->filterQueryAndFragment($query);
@@ -708,7 +708,7 @@ class Uri implements UriInterface
      * @param string $fragment The fragment to use with the new instance.
      * @return static A new instance with the specified fragment.
      */
-    public function withFragment($fragment)
+    public function withFragment($fragment) : self
     {
         if (!empty($fragment)) {
             $fragment = $this->filterQueryAndFragment($fragment);
@@ -748,16 +748,29 @@ class Uri implements UriInterface
      */
     public function __toString()
     {
+
         $uri = '';
 
         if (!empty($this->getScheme())) {
-            $uri .= $this->getScheme() . "://";
+            $uri .= $this->getScheme() . ":";
         }
 
         if (!empty($this->getAuthority())) {
-            $uri .= $this->getAuthority();
+
+            if (!empty($this->getScheme())) {
+                $uri .= "//" . $this->getAuthority();
+            } else {
+                $uri .= $this->getAuthority();
+            }
+            
         } else {
-            $uri .= $this->getHost();
+
+            if (!empty($this->getScheme())) {
+                $uri .= "//" . $this->getHost();
+            } else {
+                $uri .= $this->getHost();
+            }
+
         }
 
         if (!empty($this->getPath())) {

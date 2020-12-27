@@ -6,6 +6,6 @@ use http\Message\Uri;
 
 $request = new \http\Message\Request();
 
-$uri = (new Uri("http://d.phalcon.ld:8080/action?par=val#frag"));
+$uri = (new Uri("http://localhost:8080/action?par=val#frag"));
 
 echo $uri;
