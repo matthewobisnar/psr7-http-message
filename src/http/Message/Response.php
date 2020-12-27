@@ -3,6 +3,8 @@ namespace http\Message;
 
 use Psr\Http\Message\ResponseInterface;
 use http\Message\Abstracts\AbstractMessage;
+use http\Message\Traits\UtilitiesTraits;
+use http\Message\Traits\StatusCodeTraits;
 
 /**
  * Representation of an outgoing, server-side response.
@@ -21,6 +23,19 @@ use http\Message\Abstracts\AbstractMessage;
  */
 final class Response extends AbstractMessage implements ResponseInterface
 {
+    /**
+     * 
+     * 
+     * 
+     */
+    use StatusCodeTraits;
+    
+    /**
+     * 
+     * 
+     */
+    use UtilitiesTraits;
+
     /**
      * Gets the response status code.
      *
