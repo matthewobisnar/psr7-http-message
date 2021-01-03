@@ -1,6 +1,6 @@
 <?php
 
-namespace http\Message\Traits;
+namespace Http\Message\Traits;
 
 trait StatusCodeTraits
 {

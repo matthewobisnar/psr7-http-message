@@ -1,8 +1,8 @@
 <?php
-namespace http\Message;
+namespace Http\Message;
 
 use Psr\Http\Message\UriInterface;
-use http\Message\Traits\UtilitiesTraits;
+use Http\Message\Traits\UtilitiesTraits;
 
 /**
  * Value object representing a URI.

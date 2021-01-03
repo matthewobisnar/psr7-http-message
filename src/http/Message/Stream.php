@@ -1,9 +1,11 @@
 <?php
 
-namespace http\Message;
+namespace Http\Message;
 
 use Throwable;
-use RuntimeException;
+use Http\Message\Exceptions\RuntimeException;
+use Http\Message\Exceptions\InvalidArgumentException;
+
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -69,7 +71,7 @@ class Stream implements StreamInterface
     {
 
         if (!is_string($body) && !is_resource($body) && is_null($body)) {
-            throw new \InvalidArgumentException(sprintf("Invalid Arguments"));
+            throw new InvalidArgumentException(sprintf("Invalid Arguments"));
         }
 
         if (is_string($body)) {
@@ -173,13 +175,13 @@ class Stream implements StreamInterface
     public function tell()
     {
         if (!is_resource($this->stream)) {
-            throw new \RuntimeException(sprintf('ftell error'));
+            throw new RuntimeException(sprintf('ftell error'));
         }
 
          $position = ftell($this->stream);
 
         if ($position === false) {
-            throw new \RuntimeException(sprintf("ftell error"));
+            throw new RuntimeException(sprintf("ftell error"));
         }  
 
         return $position;
@@ -192,7 +194,6 @@ class Stream implements StreamInterface
      */
     public function eof()
     {
-
         if (!is_resource($this->stream)) {
             return false;
         }
@@ -234,15 +235,15 @@ class Stream implements StreamInterface
     public function seek($offset, $whence = SEEK_SET)
     {
         if (!is_resource($this->stream)) {
-            throw new \RuntimeException(sprintf("Stream is detached."));
+            throw new RuntimeException(sprintf("Stream is detached."));
         }
 
         if (!$this->isSeekable()) {
-            throw new \RuntimeException(sprintf("seek is not seekable."));
+            throw new RuntimeException(sprintf("seek is not seekable."));
         }
 
         if (fseek($this->stream, $offset, $whence) === -1) {
-            throw new \RuntimeException(sprintf("Unable to seek stream."));
+            throw new RuntimeException(sprintf("Unable to seek stream."));
         }
     }
 

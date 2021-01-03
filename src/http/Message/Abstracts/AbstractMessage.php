@@ -1,11 +1,11 @@
 <?php
-namespace http\Message\Abstracts;
+namespace Http\Message\Abstracts;
 
-use InvalidArgumentException;
+use Http\Message\Exceptions\InvalidArgumentException;
 
-use http\Message\Uri;
-use http\Message\Stream;
-use http\Message\Traits\UtilitiesTraits;
+use Http\Message\Uri;
+use Http\Message\Stream;
+use Http\Message\Traits\UtilitiesTraits;
 
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;

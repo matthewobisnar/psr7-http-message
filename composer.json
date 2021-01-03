@@ -3,7 +3,7 @@
     "description":"psr",
     "autoload":{
         "psr-4":{
-            "http\\": "src/http"
+            "Http\\": "src/Http"
         }
     },
     "require": {

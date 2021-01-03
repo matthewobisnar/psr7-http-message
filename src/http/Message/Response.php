@@ -1,5 +1,7 @@
 <?php
-namespace http\Message;
+namespace Http\Message;
+
+use Http\Message\Exceptions\InvalidArgumentException;
 
 use Psr\Http\Message\ResponseInterface;
 use http\Message\Traits\UtilitiesTraits;
@@ -92,7 +94,7 @@ final class Response extends AbstractMessage implements ResponseInterface
         $code = $this->isNumericParam($code);
 
         if (!array_key_exists($code, $this->http_status_codes)) {
-            throw new \InvalidArgumentException(sprintf("Invalid response status code. Status code does not exists."));
+            throw new InvalidArgumentException(sprintf("Invalid response status code. Status code does not exists."));
         }
 
         if ($this->status == $code) {

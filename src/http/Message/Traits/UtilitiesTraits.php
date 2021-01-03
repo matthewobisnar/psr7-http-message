@@ -1,5 +1,7 @@
 <?php 
-namespace http\Message\Traits;
+namespace Http\Message\Traits;
+
+use Http\Message\Exceptions\InvalidArgumentException;
 
 trait UtilitiesTraits
 {
@@ -13,7 +15,7 @@ trait UtilitiesTraits
     {
         if (!is_string($paramString)) {
 
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf("[ %s ] must be a valid string. Type ( %s ) is given in %s.", 
                     json_encode($paramString), gettype($paramString), __METHOD__
                 )
@@ -33,7 +35,7 @@ trait UtilitiesTraits
     protected function requiredInt($paramInt)
     {
         if (!is_int($paramInt)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf("[ %s ] must be a valid integer. Type ( %s ) is given. in %s ", 
                     $paramInt, gettype($paramInt), __METHOD__
                 )
@@ -49,7 +51,7 @@ trait UtilitiesTraits
         if (is_numeric($param)) {
             $numeric = (int) $param;
         } else {
-            throw new \InvalidArgumentException(sprintf("Invalid status code type."));
+            throw new InvalidArgumentException(sprintf("Invalid status code type."));
         }
 
         return $numeric;
