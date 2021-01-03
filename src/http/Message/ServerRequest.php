@@ -1,7 +1,8 @@
 <?php
 namespace Http\Message;
 
-use Http\Message\Request;
+use Http\Message\Traits\RequestTrait;
+use Http\Message\Abstracts\AbstractMessage;
 
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -43,8 +44,9 @@ use Psr\Http\Message\ServerRequestInterface;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-class ServerRequest extends Request implements ServerRequestInterface
+class ServerRequest extends AbstractMessage implements ServerRequestInterface
 {
+    use RequestTrait;
     /**
      * 
      * 
