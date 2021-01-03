@@ -41,6 +41,21 @@ final class Response extends AbstractMessage implements ResponseInterface
     public $reasonPhrase;
 
     /**
+     * 
+     * 
+     */
+    public function __construct($code, $body = null, $headers = [], $version)
+    {
+        $this->status = $this->isNumericParam($code);
+        $this->reasonPhrase = $this->http_status_codes[$this->status];
+        $this->protocolVersion = (string) $version;
+
+        $this->setHeaders($headers);
+        $this->setBody($body);
+
+    }
+
+    /**
      * Gets the response status code.
      *
      * The status code is a 3-digit integer result code of the server's attempt
