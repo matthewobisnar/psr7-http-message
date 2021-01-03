@@ -6,6 +6,7 @@ use Http\Message\Exceptions\InvalidArgumentException;
 use Http\Message\Uri;
 use Http\Message\Stream;
 use Http\Message\Traits\UtilitiesTraits;
+use Http\Message\Traits\StatusCodeTraits;
 
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
@@ -26,8 +27,8 @@ use Psr\Http\Message\MessageInterface;
 
 abstract class AbstractMessage implements MessageInterface
 {
-
     use UtilitiesTraits;
+    use StatusCodeTraits;
 
     /**
      * Map headers.

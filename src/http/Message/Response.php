@@ -25,18 +25,15 @@ use http\Message\Abstracts\AbstractMessage;
  */
 final class Response extends AbstractMessage implements ResponseInterface
 {
-    use StatusCodeTraits;
-    use UtilitiesTraits;
-
     /**
-     * 
+     * Status code
      * 
      * @var int
      */
     public $status;
     
     /**
-     * 
+     * Status Description
      * 
      * @var string
      */

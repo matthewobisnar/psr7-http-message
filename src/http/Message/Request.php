@@ -32,8 +32,6 @@ use Http\Message\Abstracts\AbstractMessage;
  */
 final class Request extends AbstractMessage implements RequestInterface
 {
-    use UtilitiesTraits;
-    use StatusCodeTraits;
 
     /**
      * UriInterface instance.
