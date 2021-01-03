@@ -44,7 +44,7 @@ final class Response extends AbstractMessage implements ResponseInterface
      * 
      * 
      */
-    public function __construct($code, $body = null, $headers = [], $version)
+    public function __construct($code, $body = null, $headers = [], $version = '1.1')
     {
         $this->status = $this->isNumericParam($code);
         $this->reasonPhrase = $this->http_status_codes[$this->status];
@@ -52,7 +52,6 @@ final class Response extends AbstractMessage implements ResponseInterface
 
         $this->setHeaders($headers);
         $this->setBody($body);
-
     }
 
     /**

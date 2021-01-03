@@ -248,7 +248,6 @@ class Stream implements StreamInterface
 
     /**
      * Seek to the beginning of the stream.
-     *
      * If the stream is not seekable, this method will raise an exception;
      * otherwise, it will perform a seek(0).
      *
