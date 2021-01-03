@@ -9,7 +9,7 @@ trait StatusCodeTraits
      * 
      * @var array
      */
-    protected $http_status_codes = array(
+    private $http_status_codes = array(
         100 => 'Informational: Continue',
         101 => 'Informational: Switching Protocols',
         102 => 'Informational: Processing',

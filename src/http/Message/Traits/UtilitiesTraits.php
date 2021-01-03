@@ -1,7 +1,7 @@
 <?php 
 namespace Http\Message\Traits;
 
-use Http\Message\Exceptions\InvalidArgumentException;
+use Http\Exceptions\InvalidArgumentException;
 
 trait UtilitiesTraits
 {

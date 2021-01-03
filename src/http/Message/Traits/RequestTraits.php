@@ -2,6 +2,7 @@
 namespace Http\Message\Traits;
 
 use Psr\Http\Message\UriInterface;
+use Http\Exceptions\InvalidArgumentException;
 
 trait RequestTraits
 {
@@ -80,7 +81,7 @@ trait RequestTraits
         $method = strtoupper($this->requiredString($method));
 
         if (!in_array($method, $this->requestMethods)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('%s is not a valid method', $method)
             );
         }

@@ -394,11 +394,10 @@ abstract class AbstractMessage implements MessageInterface
      */
     protected function setUri($uri)
     {
-        if (!is_string($uri)) {
-            throw new InvalidArgumentException(sprintf("Uri type is Invalid. %s is given.", gettype($uri)));
+        if (!($uri instanceof UriInterface)) {
+            $uri = new Uri($uri);
         }
-
-        $uri = new Uri($uri);
+        
         $this->uri = $uri;
     }
 }

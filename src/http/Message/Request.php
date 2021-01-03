@@ -64,12 +64,13 @@ final class Request extends AbstractMessage implements RequestInterface
      * @param 
      * @param
      */
-    public function __construct(array $headers, string $method, $uri, $body = null, $version = '1.1')
+    public function __construct(string $method, $uri, $body = null, $version = '1.1')
     {
+        
         $this->method = strtolower($method);
         $this->protocolVersion = (string) $version;
         $this->setUri($uri);
-        $this->setHeaders($headers);
+        $this->setHeaders(headers_list());
         $this->setBody($body);
     }
 }
