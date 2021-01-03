@@ -4,6 +4,8 @@ namespace http\Message;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
 use http\Message\Abstracts\AbstractMessage;
+use http\Message\Traits\UtilitiesTraits;
+use http\Message\Traits\StatusCodeTraits;
 
 /**
  * Representation of an outgoing, client-side request.
@@ -26,6 +28,29 @@ use http\Message\Abstracts\AbstractMessage;
  */
 final class Request extends AbstractMessage implements RequestInterface
 {
+
+    /**
+     * 
+     * 
+     */
+    use UtilitiesTraits;
+    use StatusCodeTraits;
+
+    /**
+     * 
+     * 
+     * 
+     */
+    private $uri;
+
+    private $method;
+      
+    private $requestTarget;
+
+    function __construct()
+    {
+        
+    }
 
     /**
      * Retrieves the message's request target.
@@ -68,6 +93,9 @@ final class Request extends AbstractMessage implements RequestInterface
     public function withRequestTarget($requestTarget)
     {
 
+        $new = clone $this;
+
+        return $new;
     }
 
     /**
@@ -77,7 +105,7 @@ final class Request extends AbstractMessage implements RequestInterface
      */
     public function getMethod()
     {
-
+        return $this->method;
     }
 
     /**
@@ -97,6 +125,17 @@ final class Request extends AbstractMessage implements RequestInterface
      */
     public function withMethod($method)
     {
+        $method = strtoupper($this->requiredString($method));
+
+        if (!in_array($method, $this->requestMethods)) {
+            throw new \InvalidArgumentException(
+                sprintf('%s is not a valid method', $method)
+            );
+        }
+
+        $new = clone $this;
+        $new->method = $method;
+        return $new;
 
     }
 
@@ -111,7 +150,7 @@ final class Request extends AbstractMessage implements RequestInterface
      */
     public function getUri()
     {
-
+        return $this->uri;
     }
 
     /**
@@ -146,7 +185,7 @@ final class Request extends AbstractMessage implements RequestInterface
      */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
-
+        $this->uri = $uri;
     }
 }
 

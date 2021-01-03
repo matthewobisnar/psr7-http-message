@@ -88,4 +88,24 @@ trait StatusCodeTraits
         598 => 'Server Error: Network read timeout error',
         599 => 'Server Error: Network connect timeout error',
     );
+
+    /**
+     * 
+     * 
+     * 
+     */
+    protected $requestMethods = [
+        'GET',
+        'POST',
+        'PUT',
+        'OPTIONS',
+        'PATCH',
+        'DELETE',
+    ];
+
+    /**
+     * 
+     * 
+     */
+    private $preservedHost = "localhost";
 }
