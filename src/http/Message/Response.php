@@ -1,12 +1,11 @@
 <?php
 namespace Http\Message;
 
-use Http\Exceptions\InvalidArgumentException;
-
 use Psr\Http\Message\ResponseInterface;
 use http\Message\Traits\UtilitiesTraits;
 use http\Message\Traits\StatusCodeTraits;
 use http\Message\Abstracts\AbstractMessage;
+use Http\Exceptions\InvalidArgumentException;
 
 /**
  * Representation of an outgoing, server-side response.

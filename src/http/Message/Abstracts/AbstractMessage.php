@@ -1,16 +1,14 @@
 <?php
 namespace Http\Message\Abstracts;
 
-use Http\Exceptions\InvalidArgumentException;
-
 use Http\Message\Uri;
 use Http\Message\Stream;
-use Http\Message\Traits\UtilitiesTraits;
-use Http\Message\Traits\StatusCodeTraits;
-
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\MessageInterface;
+use Http\Message\Traits\UtilitiesTraits;
+use Http\Message\Traits\StatusCodeTraits;
+use Http\Exceptions\InvalidArgumentException;
 
 /**
  * HTTP messages consist of requests from a client to a server and responses
@@ -381,10 +379,6 @@ abstract class AbstractMessage implements MessageInterface
             $body = new Stream($body);
         }
         
-        // if (!is_null($body)) {
-        //     throw new \InvalidArgumentException(sprintf("Invalid Argument type."));
-        // }
-
         $this->body = $body;
     }
 
@@ -397,7 +391,7 @@ abstract class AbstractMessage implements MessageInterface
         if (!($uri instanceof UriInterface)) {
             $uri = new Uri($uri);
         }
-        
+
         $this->uri = $uri;
     }
 }

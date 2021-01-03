@@ -3,10 +3,9 @@
 namespace Http\Message;
 
 use Throwable;
-use Http\Exceptions\InvalidArgumentException;
 use Http\Exceptions\RuntimeException;
-
 use Psr\Http\Message\StreamInterface;
+use Http\Exceptions\InvalidArgumentException;
 
 /**
  * Describes a data stream.
