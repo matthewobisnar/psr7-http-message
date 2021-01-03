@@ -1,7 +1,7 @@
 <?php
 namespace Http\Message;
 
-use Http\Message\Exceptions\InvalidArgumentException;
+use Http\Exceptions\InvalidArgumentException;
 
 use Psr\Http\Message\ResponseInterface;
 use http\Message\Traits\UtilitiesTraits;

@@ -3,8 +3,8 @@
 namespace Http\Message;
 
 use Throwable;
-use Http\Message\Exceptions\RuntimeException;
-use Http\Message\Exceptions\InvalidArgumentException;
+use Http\Exceptions\InvalidArgumentException;
+use Http\Exceptions\RuntimeException;
 
 use Psr\Http\Message\StreamInterface;
 
@@ -70,8 +70,8 @@ class Stream implements StreamInterface
     public function __construct($body = null)
     {
 
-        if (!is_string($body) && !is_resource($body) && is_null($body)) {
-            throw new InvalidArgumentException(sprintf("Invalid Arguments"));
+        if (!is_string($body) && !is_resource($body) && !is_null($body)) {
+            throw new \InvalidArgumentException(sprintf("Invalid Arguments"));
         }
 
         if (is_string($body)) {
@@ -128,7 +128,7 @@ class Stream implements StreamInterface
      */
     public function close()
     {
-        if (!is_null($this->stream) && is_resource($this->stream)) {
+        if (is_resource($this->stream)) {
 
             fclose($this->stream);
             $this->detach();

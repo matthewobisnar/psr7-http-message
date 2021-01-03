@@ -1,7 +1,7 @@
 <?php
 namespace Http\Message;
 
-use Http\Message\Exceptions\InvalidArgumentException;
+use Http\Exceptions\InvalidArgumentException;
 
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
@@ -40,21 +40,21 @@ final class Request extends AbstractMessage implements RequestInterface
      * 
      * @var UriInterface
      */
-    private $uri;
+    protected $uri;
 
     /**
      * Http verb
      * 
      * @var string
      */
-    private $method;
+    protected $method;
 
     /**
      * Request Target
      * 
      * @var string
      */
-    private $requestTarget;
+    protected $requestTarget;
 
     /**
      * 
@@ -64,7 +64,7 @@ final class Request extends AbstractMessage implements RequestInterface
      * @param 
      * @param
      */
-    public function __construct(array $headers, string $method, $uri, $body = null, $version)
+    public function __construct(array $headers, string $method, $uri, $body = null, $version = '1.1')
     {
         $this->method = strtolower($method);
         $this->protocolVersion = (string) $version;

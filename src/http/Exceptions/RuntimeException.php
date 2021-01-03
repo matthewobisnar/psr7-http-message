@@ -1,5 +1,5 @@
 <?php
-namespace Http\Message\Exceptions;
+namespace Http\Exceptions;
 
 class RuntimeException extends \RuntimeException
 {

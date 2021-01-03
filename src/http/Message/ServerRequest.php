@@ -48,27 +48,83 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
 {
     use RequestTraits;
 
+        /**
+     * UriInterface instance.
+     * 
+     * @var UriInterface
+     */
+    protected $uri;
+
+    /**
+     * Http verb
+     * 
+     * @var string
+     */
+    private $method;
+
+    /**
+     * Request Target
+     * 
+     * @var string
+     */
+    private $requestTarget;
+
     /**
      * 
      * @var array
      */
     private $server;
 
+    /**
+     * 
+     * @var array
+     */
     private $cookies;
 
+    /**
+     * 
+     * @var query
+     */
     private $query;
 
+    /**
+     * 
+     * @var mixed
+     */
     private $parsedBody;
 
+    /**
+     * 
+     * @var array
+     */
     private $attributes;
 
     /**
      * 
-     * 
+     * @param array
+     * @param string
+     * @param UrilInterface
+     * @param 
+     * @param
      */
-    public function __construct()
+    public function __construct(
+        string $method,
+        $uri, 
+        array $headers = [], 
+        $servers = [], 
+        $cookies = [],
+        $attributes = [], 
+        $body = null,
+        $version = "1.1")
     {
-        
+        $this->method = strtolower($method);
+        $this->protocolVersion = (string) $version;
+        $this->cookies = $cookies;
+        $this->server = $servers;
+        $this->attributes = $attributes;
+        $this->setUri($uri);
+        $this->setHeaders($headers);
+        $this->setBody($body);
     }
 
     /**
