@@ -3,7 +3,7 @@ namespace Http\Message\Traits;
 
 use Psr\Http\Message\UriInterface;
 
-trait RequestTrait
+trait RequestTraits
 {
     /**
      * Retrieves the message's request target.

@@ -7,7 +7,7 @@ use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
 
-use Http\Message\Traits\RequestTrait;
+use Http\Message\Traits\RequestTraits;
 use Http\Message\Traits\UtilitiesTraits;
 use Http\Message\Traits\StatusCodeTraits;
 use Http\Message\Abstracts\AbstractMessage;
@@ -33,7 +33,7 @@ use Http\Message\Abstracts\AbstractMessage;
  */
 final class Request extends AbstractMessage implements RequestInterface
 {
-    use RequestTrait;
+    use RequestTraits;
 
     /**
      * UriInterface instance.

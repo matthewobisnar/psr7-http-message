@@ -5,7 +5,7 @@ use Http\Message\Exceptions\InvalidArgumentException;
 
 trait UtilitiesTraits
 {
-        /**
+    /**
      * Validate date Type string.
      * 
      * @param string

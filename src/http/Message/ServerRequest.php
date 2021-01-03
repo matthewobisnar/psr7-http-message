@@ -1,7 +1,7 @@
 <?php
 namespace Http\Message;
 
-use Http\Message\Traits\RequestTrait;
+use Http\Message\Traits\RequestTraits;
 use Http\Message\Abstracts\AbstractMessage;
 
 use Psr\Http\Message\ServerRequestInterface;
@@ -46,12 +46,21 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class ServerRequest extends AbstractMessage implements ServerRequestInterface
 {
-    use RequestTrait;
+    use RequestTraits;
+
     /**
      * 
-     * 
+     * @var array
      */
-    private $serverParams;
+    private $server;
+
+    private $cookies;
+
+    private $query;
+
+    private $parsedBody;
+
+    private $attributes;
 
     /**
      * 
@@ -73,7 +82,7 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function getServerParams()
     {
-        
+        return $this->server;
     }
 
     /**
@@ -88,7 +97,7 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function getCookieParams()
     {
-
+        return $this->cookies;
     }
 
     /**
@@ -110,7 +119,10 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function withCookieParams(array $cookies)
     {
+        $new = clone $this;
+        $new->cookies = $cookies;
 
+        return $new;
     }
 
     /**
@@ -127,7 +139,11 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function getQueryParams()
     {
+        if (empty($this->query)) {
+            parse_str($this->getUri()->getQuery(), $this->query);
+        }
 
+        return $this->query;
     }
 
     /**
@@ -154,7 +170,10 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function withQueryParams(array $query)
     {
+        $new = clone $this;
+        $new->query = $query;
 
+        return $new;
     }
 
     /**
@@ -207,8 +226,52 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function getParsedBody()
     {
+        if (!empty($this->parsedBody)) {
+            return $this->parsedBody;
+        }
 
+        if ($this->isPost()) {
+            return $_POST;
+        }
+
+        if ($this->inHeader('content-type', 'application/json')) {
+            return json_decode($this->getBody()->getContents());
+        }
+
+        return $this->body;
     }
+
+    /**
+     * 
+     * 
+     * @return Boolean
+     */
+    protected function isPost()
+    {
+        $postHeaders = ['application/x-www-form-urlencoded', 'multipart/form-data'];
+        $postHeaderValue = $this->getHeader('Content-Type');
+
+        foreach ($postHeaderValue as $values) {
+            if (in_array($values, $postHeaders)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 
+     * 
+     * @param string
+     * @param string
+     * @return array
+     */
+     protected function inHeader($header, $value)
+     {
+        $headerValue = $this->getHeader($header);
+        return in_array($headerValue, $value);
+     }
 
     /**
      * Return an instance with the specified body parameters.
@@ -240,7 +303,14 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function withParsedBody($data)
     {
+        if ($this->parsedBody == $data) {
+            return $this;
+        }
 
+        $new = clone $this;
+        $new->parsedBody = $data;
+
+        return $new;
     }
 
     /**
@@ -256,7 +326,7 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function getAttributes()
     {
-
+        return $this->attributes;
     }
 
     /**
@@ -276,7 +346,7 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function getAttribute($name, $default = null)
     {
-
+        return $this->attributes[$name] ?? $default;
     }
 
     /**
@@ -296,7 +366,14 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function withAttribute($name, $value)
     {
+        if ($this->attributes[$name] == $value) {
+            return $this;
+        }
 
+        $new = clone $this;
+        $new->attributes[$name] = $value;
+
+        return $new;
     }
 
     /**
@@ -315,6 +392,10 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      */
     public function withoutAttribute($name)
     {
+        $new = clone $this;
 
+        unset($new->attributes[$name]);
+
+        return $new;
     }
 }
