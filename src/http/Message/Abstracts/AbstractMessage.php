@@ -1,9 +1,15 @@
 <?php
 namespace http\Message\Abstracts;
 
+use InvalidArgumentException;
+
+use http\Message\Uri;
+use http\Message\Stream;
+use http\Message\Traits\UtilitiesTraits;
+
+use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\MessageInterface;
-use http\Message\Traits\UtilitiesTraits;
 
 /**
  * HTTP messages consist of requests from a client to a server and responses
@@ -20,10 +26,7 @@ use http\Message\Traits\UtilitiesTraits;
 
 abstract class AbstractMessage implements MessageInterface
 {
-    /**
-     * 
-     * @Utilities
-     */
+
     use UtilitiesTraits;
 
     /**
@@ -343,5 +346,54 @@ abstract class AbstractMessage implements MessageInterface
         $new = clone $this;
         $new->body = $body;
         return $new;
+    }
+
+    /**
+     * Set headers
+     * 
+     * @param array of headers
+     * @return array;
+     * @return void
+     */
+    public function setHeaders($headers)
+    {
+        foreach ($headers as $headerKey => $header) {
+
+            $key = strtolower($headerKey);
+            $value = strtolower($header);
+        
+            if (is_string($value)) {
+                $this->headers[$key] = explode(',', $value);
+            } else {
+                $this->headers[$key] = $value;
+            }
+        }
+    }
+
+    /**
+     * 
+     * @return void
+     */
+    public function setBody($body = null)
+    {
+        if (!($body instanceof StreamInterface)) {
+            $body = new Stream($body);
+        }
+        
+        $this->body = $body;
+    }
+
+    /**
+     * 
+     * @return void
+     */
+    protected function setUri($uri)
+    {
+        if (!is_string($uri)) {
+            throw new InvalidArgumentException(sprintf("Uri type is Invalid. %s is given.", gettype($uri)));
+        }
+
+        $uri = new Uri($uri);
+        $this->uri = $uri;
     }
 }

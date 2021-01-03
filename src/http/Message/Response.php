@@ -2,9 +2,9 @@
 namespace http\Message;
 
 use Psr\Http\Message\ResponseInterface;
-use http\Message\Abstracts\AbstractMessage;
 use http\Message\Traits\UtilitiesTraits;
 use http\Message\Traits\StatusCodeTraits;
+use http\Message\Abstracts\AbstractMessage;
 
 /**
  * Representation of an outgoing, server-side response.
@@ -23,18 +23,22 @@ use http\Message\Traits\StatusCodeTraits;
  */
 final class Response extends AbstractMessage implements ResponseInterface
 {
+    use StatusCodeTraits;
+    use UtilitiesTraits;
+
     /**
      * 
      * 
-     * 
+     * @var int
      */
-    use StatusCodeTraits;
+    public $status;
     
     /**
      * 
      * 
+     * @var string
      */
-    use UtilitiesTraits;
+    public $reasonPhrase;
 
     /**
      * Gets the response status code.
@@ -46,7 +50,7 @@ final class Response extends AbstractMessage implements ResponseInterface
      */
     public function getStatusCode()
     {
-       
+       return $this->status;
     }
 
     /**
@@ -71,7 +75,21 @@ final class Response extends AbstractMessage implements ResponseInterface
      */
     public function withStatus($code, $reasonPhrase = '')
     {
+        $code = $this->isNumericParam($code);
 
+        if (!array_key_exists($code, $this->http_status_codes)) {
+            throw new \InvalidArgumentException(sprintf("Invalid response status code. Status code does not exists."));
+        }
+
+        if ($this->status == $code) {
+            return $this;
+        }
+
+        $new = clone $this;
+        $new->status = $code;
+        $new->reasonPhrase = $this->http_status_codes[$code];
+
+        return $new;
     }
 
     /**
@@ -89,7 +107,7 @@ final class Response extends AbstractMessage implements ResponseInterface
      */
     public function getReasonPhrase()
     {
-
+        return $this->reasonPhrase;
     }
 }
 

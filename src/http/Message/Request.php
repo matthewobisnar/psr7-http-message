@@ -1,11 +1,15 @@
 <?php
 namespace http\Message;
 
+use InvalidArgumentException;
+
 use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
-use http\Message\Abstracts\AbstractMessage;
+
 use http\Message\Traits\UtilitiesTraits;
 use http\Message\Traits\StatusCodeTraits;
+use http\Message\Abstracts\AbstractMessage;
 
 /**
  * Representation of an outgoing, client-side request.
@@ -28,28 +32,45 @@ use http\Message\Traits\StatusCodeTraits;
  */
 final class Request extends AbstractMessage implements RequestInterface
 {
-
-    /**
-     * 
-     * 
-     */
     use UtilitiesTraits;
     use StatusCodeTraits;
 
     /**
+     * UriInterface instance.
      * 
-     * 
-     * 
+     * @var UriInterface
      */
     private $uri;
 
+    /**
+     * Http verb
+     * 
+     * @var string
+     */
     private $method;
-      
+
+    /**
+     * Request Target
+     * 
+     * @var string
+     */
     private $requestTarget;
 
-    function __construct()
+    /**
+     * 
+     * @param array
+     * @param string
+     * @param UrilInterface
+     * @param 
+     * @param
+     */
+    public function __construct(array $headers, string $method, $uri, $body = null, $version)
     {
-        
+        $this->method = strtolower($method);
+        $this->protocolVersion = (string) $version;
+        $this->setUri($uri);
+        $this->setHeaders($headers);
+        $this->setBody($body);
     }
 
     /**
@@ -70,7 +91,7 @@ final class Request extends AbstractMessage implements RequestInterface
      */
     public function getRequestTarget()
     {
-        
+        return $this->requestTarget;
     }
 
     /**
@@ -92,9 +113,8 @@ final class Request extends AbstractMessage implements RequestInterface
      */
     public function withRequestTarget($requestTarget)
     {
-
         $new = clone $this;
-
+        $new->requestTarget = $requestTarget;
         return $new;
     }
 
@@ -131,6 +151,10 @@ final class Request extends AbstractMessage implements RequestInterface
             throw new \InvalidArgumentException(
                 sprintf('%s is not a valid method', $method)
             );
+        }
+        
+        if ($method == strtoupper($this->method)) {
+            return $this;
         }
 
         $new = clone $this;
@@ -185,7 +209,15 @@ final class Request extends AbstractMessage implements RequestInterface
      */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
-        $this->uri = $uri;
+        $new = clone $this;
+       
+        if ($preserveHost) {
+            $new->uri = $uri->withHost($this->uri->getHost());
+        } else {
+            $new->uri = $uri;
+        }
+
+        return $new;
     }
 }
 

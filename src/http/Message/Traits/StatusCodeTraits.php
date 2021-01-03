@@ -90,9 +90,7 @@ trait StatusCodeTraits
     );
 
     /**
-     * 
-     * 
-     * 
+     * @var array list of Http verbs
      */
     protected $requestMethods = [
         'GET',
@@ -101,11 +99,13 @@ trait StatusCodeTraits
         'OPTIONS',
         'PATCH',
         'DELETE',
+        'HEAD'
     ];
 
     /**
+     * Default url basepath
      * 
-     * 
+     * @var string
      */
     private $preservedHost = "localhost";
 }

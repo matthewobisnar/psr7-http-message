@@ -44,6 +44,17 @@ trait UtilitiesTraits
         return $paramInt;
     } 
 
+    public function isNumericParam($param)
+    {
+        if (is_numeric($param)) {
+            $numeric = (int) $param;
+        } else {
+            throw new \InvalidArgumentException(sprintf("Invalid status code type."));
+        }
+
+        return $numeric;
+    }
+
     /**
      * Convert to parameter to integer
      * 

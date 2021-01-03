@@ -1,11 +1,10 @@
 <?php
 
-namespace Message;
+namespace http\Message;
 
-use Exception;
-use Psr\Http\Message\StreamInterface;
-use RuntimeException;
 use Throwable;
+use RuntimeException;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Describes a data stream.
