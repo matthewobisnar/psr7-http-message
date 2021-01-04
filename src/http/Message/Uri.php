@@ -147,7 +147,7 @@ class Uri implements UriInterface
         $components = [];
         
         foreach (self::PARSE_URL_CONSTANTS as $key => $names) {
-            $components[strtoUpper($key)] = $this->{strtolower($key)};
+            $components[strtoupper($key)] = $this->{strtolower($key)};
         }
 
         return $components;
