@@ -26,7 +26,19 @@ use Http\Exceptions\InvalidArgumentException;
 abstract class AbstractMessage implements MessageInterface
 {
     use UtilitiesTraits;
-    use StatusCodeTraits;
+
+    /**
+     * @var array list of Http verbs
+     */
+    protected $requestMethods = [
+        'GET',
+        'POST',
+        'PUT',
+        'OPTIONS',
+        'PATCH',
+        'DELETE',
+        'HEAD'
+    ];
 
     /**
      * Map headers.
@@ -137,6 +149,7 @@ abstract class AbstractMessage implements MessageInterface
                 $header[$origin] = $value;
             }
         }
+
         return $header;
     }
 

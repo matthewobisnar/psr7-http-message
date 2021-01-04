@@ -76,7 +76,6 @@ class Request extends AbstractMessage implements RequestInterface
             );
             
             $this->setUri($uri);
-        
         } else {
             $this->setUri($uri);
         }
@@ -222,7 +221,7 @@ class Request extends AbstractMessage implements RequestInterface
     {
         $new = clone $this;
        
-        if ($preserveHost) {
+        if ($preserveHost === true) {
             $new->uri = $uri->withHost($this->uri->getHost());
         } else {
             $new->uri = $uri;

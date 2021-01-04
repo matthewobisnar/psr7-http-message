@@ -3,7 +3,6 @@ namespace Http\Message;
 
 use Http\Message\Traits\RequestTraits;
 use Http\Message\Abstracts\AbstractMessage;
-
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
