@@ -417,6 +417,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * 
      * {@inheritdoc}
+     * 
      * @param string
      * @return array
      */
