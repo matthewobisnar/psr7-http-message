@@ -1,6 +1,8 @@
 <?php
 require __DIR__ . "/vendor/autoload.php";
 
-$request = new \Http\Message\Request($_SERVER);
+$request = new \Http\Message\Request(
+    $_SERVER
+);
 
-var_dump($request);
+var_dump($request->getUri()->getQuery());

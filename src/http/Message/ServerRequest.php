@@ -3,6 +3,7 @@ namespace Http\Message;
 
 use Http\Message\Traits\RequestTraits;
 use Http\Message\Abstracts\AbstractMessage;
+
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -52,7 +53,7 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      * 
      * @var UriInterface
      */
-    protected $uri;
+    private $uri;
 
     /**
      * Http verb
@@ -107,8 +108,8 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      * @param
      */
     public function __construct(
+        $uri = '', 
         string $method,
-        $uri, 
         array $headers = [], 
         $servers = [], 
         $cookies = [],

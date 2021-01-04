@@ -26,7 +26,6 @@ use Http\Message\Traits\UtilitiesTraits;
  */
 class Uri implements UriInterface
 {
-
     /**
      * Generic methods
      * 
