@@ -303,7 +303,7 @@ class ServerRequest extends AbstractMessage implements UdServerRequestInterface
         if ($this->isPost()) {
             return $_POST;
         }
-
+        
         if ($this->inHeader('content-type', 'application/json')) {
             return json_decode($this->getBody()->getContents());
         }
@@ -312,8 +312,6 @@ class ServerRequest extends AbstractMessage implements UdServerRequestInterface
     }
 
     /**
-     * 
-     * 
      * @return Boolean
      */
     protected function isPost()
@@ -321,8 +319,16 @@ class ServerRequest extends AbstractMessage implements UdServerRequestInterface
         $postHeaders = ['application/x-www-form-urlencoded', 'multipart/form-data'];
         $postHeaderValue = $this->getHeader('Content-Type');
 
-        foreach ($postHeaderValue as $values) {
-            if (in_array($values, $postHeaders)) {
+        if (is_array($postHeaderValue)) {
+            foreach ($postHeaderValue as $values) {
+                if (in_array($values, $postHeaders)) {
+                    return true;
+                }
+            }
+        } 
+        
+        if (!is_array($postHeaderValue)) {
+            if (in_array($postHeaderValue, $postHeaders)) {
                 return true;
             }
         }
@@ -331,8 +337,6 @@ class ServerRequest extends AbstractMessage implements UdServerRequestInterface
     }
 
     /**
-     * 
-     * 
      * @param string
      * @param string
      * @return array
@@ -340,7 +344,12 @@ class ServerRequest extends AbstractMessage implements UdServerRequestInterface
      protected function inHeader($header, $value)
      {
         $headerValue = $this->getHeader($header);
-        return in_array($headerValue, $value);
+
+        if (is_array($headerValue)) {
+            return in_array($value, $headerValue);
+        } else {
+            return $headerValue == $value;
+        }
      }
 
     /**

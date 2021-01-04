@@ -184,7 +184,7 @@ abstract class AbstractMessage implements MessageInterface
     {
        $name = strtolower($name);
 
-       if (!isset($this->header[$name])) {
+       if (!isset($this->headers[$name])) {
             return [];
        }
 
@@ -432,5 +432,16 @@ abstract class AbstractMessage implements MessageInterface
         }
 
         return $outputHeader;
+    }
+
+    /**
+     * {@inheritdoc}
+     * 
+     * @param string
+     * @return array
+     */
+    public function defaultHeader()
+    {
+
     }
 }
