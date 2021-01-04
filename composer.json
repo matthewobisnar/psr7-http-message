@@ -3,10 +3,12 @@
     "description":"psr",
     "autoload":{
         "psr-4":{
-            "Http\\": "src/Http"
+            "Http\\": "src/Http",
+            "Middleware\\": "src/Middleware"
         }
     },
     "require": {
-        "psr/http-message": "^1.0"
+        "psr/http-message": "^1.0",
+        "psr/http-server-handler": "^1.0"
     }
 }

@@ -2,11 +2,9 @@
 namespace Http\Message;
 
 use Psr\Http\Message\ResponseInterface;
-use http\Message\Traits\UtilitiesTraits;
-use http\Message\Traits\StatusCodeTraits;
-use http\Message\Abstracts\AbstractMessage;
+use Http\Message\Traits\UtilitiesTraits;
+use Http\Message\Abstracts\AbstractMessage;
 use Http\Exceptions\InvalidArgumentException;
-
 /**
  * Representation of an outgoing, server-side response.
  *
@@ -24,6 +22,13 @@ use Http\Exceptions\InvalidArgumentException;
  */
 final class Response extends AbstractMessage implements ResponseInterface
 {
+    public const INFORMATIONAL_CONTINUE             = 100;
+    public const INFORMATIONAL_SWITCHING_PROTOCOLS  = 101;
+    public const INFORMATIONAL_PROCESSING           = 102;
+    public const SUCCESSFUL_OK                      = 200;
+    public const SUCCESSFUL_CREATED                 = 201;
+    public const SUCCESSFUL_ACCEPTED                = 202;
+
      /**
      * Response status code and descriptions
      * 
@@ -127,7 +132,7 @@ final class Response extends AbstractMessage implements ResponseInterface
      * 
      * 
      */
-    public function __construct($code, $body = null, $headers = [], $version = '1.1')
+    public function __construct($code, $body = '', $headers = [], $version = '1.1')
     {
         $this->status = $this->isNumericParam($code);
         $this->reasonPhrase = $this->http_status_codes[$this->status];

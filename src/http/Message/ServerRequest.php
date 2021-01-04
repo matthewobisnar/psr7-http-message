@@ -107,20 +107,25 @@ class ServerRequest extends AbstractMessage implements UdServerRequestInterface
      * @param
      */
     public function __construct(
-        $method, 
-        $servers = [], 
-        $uri, 
+        $servers = [],
         $headers = [], 
-        $body = null,
+        $body = '',
         $attributes = [],
         $cookies = [], 
         $version = '1.1'
     ) {
-        $this->method = $method;
+        $this->method = $servers['REQUEST_METHOD'];
         $this->cookies = $cookies;
         $this->server = $servers;
         $this->protocolVersion = $version;
         
+        $uri = sprintf(
+            "%s://%s%s",
+            $_SERVER['REQUEST_SCHEME'], 
+            $_SERVER['HTTP_HOST'], 
+            $_SERVER['REQUEST_URI']
+        );
+
         $this->setUri($uri);
         $this->setHeaders($headers);
         $this->setBody($body);

@@ -400,6 +400,7 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
+     * 
      * {@inheritdoc}
      * 
      * @return void
@@ -411,5 +412,24 @@ abstract class AbstractMessage implements MessageInterface
         }
 
         $this->uri = $uri;
+    }
+
+    /**
+     * 
+     * {@inheritdoc}
+     * @param string
+     * @return array
+     */
+    public function getServerHeaderFromUri($url)
+    {
+        $outputHeader = [];
+
+        foreach (get_headers($url) as $header) {
+            list($key, $value) = array_pad(str_split(':', $header), 2 ,'');
+
+            $outputHeader[strtolower($key)] = strtolower($value);
+        }
+
+        return $outputHeader;
     }
 }
