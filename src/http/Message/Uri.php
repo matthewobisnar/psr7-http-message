@@ -154,17 +154,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * Filter and return example.com url format
-     * 
-     * @param string
-     * @return string hostname
-     */
-    protected function filterHost($param)
-    {
-        return preg_replace ('/^[\w\W]\./', '', $param);
-    }
-
-    /**
      * Filters the path of a URI
      *
      * @param mixed $path
@@ -410,7 +399,7 @@ class Uri implements UriInterface
      */
     public function getQuery()
     {
-        return urlencode($this->php_url_query);
+        return $this->php_url_query;
     }
 
     /**
@@ -431,7 +420,7 @@ class Uri implements UriInterface
      */
     public function getFragment()
     {
-        return urlencode($this->php_url_fragment);
+        return $this->php_url_fragment;
     }
 
     /**
@@ -606,7 +595,7 @@ class Uri implements UriInterface
         }
 
         $new = clone $this;
-        $new->php_url_path = $path;
+        $new->php_url_path = rawurldecode($path);
         return $new;
     }
 
@@ -636,7 +625,7 @@ class Uri implements UriInterface
         }
         
         $new = clone $this;
-        $new->php_url_query = $query;
+        $new->php_url_query = urldecode($query);
         return $new;
     }
 
@@ -665,7 +654,7 @@ class Uri implements UriInterface
         }
 
         $new = clone $this;
-        $new->php_url_fragment = $fragment;
+        $new->php_url_fragment = urldecode($fragment);
         return $new;
     }
 
@@ -694,7 +683,17 @@ class Uri implements UriInterface
      */
     public function __toString()
     {
+       return $this->getUriString();
+    }
 
+    /**
+     * {@inheritdoc}
+     * 
+     * @param void
+     * @return string
+     */
+    public function getUriString()
+    {
         $uri = '';
 
         if (!empty($this->getScheme())) {
@@ -720,15 +719,15 @@ class Uri implements UriInterface
         }
 
         if (!empty($this->getPath())) {
-            $uri .= rawurldecode(preg_replace('/^\/+/', '/', $this->getPath()));
+            $uri .= preg_replace('/^\/+/', '/', $this->getPath());
         }
        
         if (!empty($this->getQuery())) {
-            $uri .= "?" . rawurldecode($this->getQuery());
+            $uri .= "?" . $this->getQuery();
         }
 
         if (!empty($this->getFragment())) {
-            $uri .= "#" . rawurldecode($this->getFragment());
+            $uri .= "#" . $this->getFragment();
         }
 
         return $uri;

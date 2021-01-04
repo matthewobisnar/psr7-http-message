@@ -3,8 +3,7 @@ namespace Http\Message;
 
 use Http\Message\Traits\RequestTraits;
 use Http\Message\Abstracts\AbstractMessage;
-
-use Psr\Http\Message\ServerRequestInterface;
+use Http\Message\Interfaces\UdServerRequestInterface;
 
 /**
  * Representation of an incoming, server-side HTTP request.
@@ -44,60 +43,60 @@ use Psr\Http\Message\ServerRequestInterface;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-class ServerRequest extends AbstractMessage implements ServerRequestInterface
+class ServerRequest extends AbstractMessage implements UdServerRequestInterface
 {
     use RequestTraits;
 
-        /**
+    /**
      * UriInterface instance.
      * 
      * @var UriInterface
      */
-    private $uri;
+    protected $uri;
 
     /**
      * Http verb
      * 
      * @var string
      */
-    private $method;
+    protected $method;
 
     /**
      * Request Target
      * 
      * @var string
      */
-    private $requestTarget;
+    protected $requestTarget;
 
     /**
      * 
      * @var array
      */
-    private $server;
+    protected $server;
 
     /**
      * 
      * @var array
      */
-    private $cookies;
+    protected $cookies;
 
     /**
      * 
      * @var query
      */
-    private $query;
+    protected $query;
 
     /**
      * 
      * @var mixed
      */
-    private $parsedBody;
+    protected $parsedBody;
 
     /**
      * 
      * @var array
      */
-    private $attributes;
+    protected $attributes;
 
     /**
      * 
@@ -108,20 +107,20 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
      * @param
      */
     public function __construct(
-        $uri = '', 
-        string $method,
-        array $headers = [], 
+        $method, 
         $servers = [], 
-        $cookies = [],
-        $attributes = [], 
+        $uri, 
+        $headers = [], 
         $body = null,
-        $version = "1.1")
-    {
-        $this->method = strtolower($method);
-        $this->protocolVersion = (string) $version;
+        $attributes = [],
+        $cookies = [], 
+        $version = '1.1'
+    ) {
+        $this->method = $method;
         $this->cookies = $cookies;
         $this->server = $servers;
-        $this->attributes = $attributes;
+        $this->protocolVersion = $version;
+        
         $this->setUri($uri);
         $this->setHeaders($headers);
         $this->setBody($body);
@@ -200,6 +199,16 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
         }
 
         return $this->query;
+    }
+
+    /**
+     * 
+     * @param string
+     * @return array
+     */
+    public function getQuery($name)
+    {
+        return isset($this->getQueryParams()[$name]) ? $this->getQueryParams()[$name] : "";
     }
 
     /**
@@ -294,7 +303,7 @@ class ServerRequest extends AbstractMessage implements ServerRequestInterface
             return json_decode($this->getBody()->getContents());
         }
 
-        return $this->body;
+        return [];
     }
 
     /**

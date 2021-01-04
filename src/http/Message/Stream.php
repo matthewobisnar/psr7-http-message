@@ -23,8 +23,8 @@ class Stream implements StreamInterface
      * @var array
      */
     private const MODES = [
-        "read" => ['r', 'r+', 'w+', 'a+', 'x+', 'c+'],
-        "write" => ['r+', 'w' ,'w+', 'a', 'a+', 'x', 'x+', 'c', 'c+']
+        "read" => ['rb', 'r+b', 'w+b', 'a+b', 'x+b', 'c+b'],
+        "write" => ['r+b', 'w+b', 'wb' ,'w+b', 'ab', 'a+b', 'xb', 'x+b', 'cb', 'c+b']
     ];
 
     /**
@@ -73,8 +73,8 @@ class Stream implements StreamInterface
             throw new \InvalidArgumentException(sprintf("Invalid Arguments"));
         }
 
-        if (is_string($body)) {
-
+        if (is_string($body) || is_null($body)) {
+          
           $resource = fopen('php://temp', 'w+');
           fwrite($resource, $body);
           $body = $resource;
@@ -271,10 +271,8 @@ class Stream implements StreamInterface
             return false;
         }
 
-        if (is_null($this->writable)) {
-            $mode = $this->getMetadata('mode');
-            $this->writable = in_array($mode, self::MODES["write"]);
-        }
+        $mode = $this->getMetadata('mode');
+        $this->writable = in_array($mode, self::MODES["write"]);
 
         return $this->writable;
     }
@@ -336,6 +334,10 @@ class Stream implements StreamInterface
             throw new RuntimeException(sprintf("stream is not readable"));
         }
 
+        if ($this->isSeekable()) {
+            $this->rewind(0);
+        }
+
         $result = fread($this->stream, $length);
 
         if ($result === false) {
@@ -358,8 +360,12 @@ class Stream implements StreamInterface
             throw new RuntimeException(sprintf("stream is not resource type."));
         }
 
-        $result = stream_get_contents($this->stream);
+        if ($this->isSeekable()) {
+            $this->rewind(0);
+        }
 
+        $result = stream_get_contents($this->stream);
+        
         if ($result === false) {
             throw new RuntimeException(sprintf("Unable to read stream."));
         }

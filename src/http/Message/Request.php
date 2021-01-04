@@ -9,25 +9,7 @@ use Http\Message\Traits\StatusCodeTraits;
 use Http\Message\Abstracts\AbstractMessage;
 use Http\Exceptions\InvalidArgumentException;
 
-/**
- * Representation of an outgoing, client-side request.
- *
- * Per the HTTP specification, this interface includes properties for
- * each of the following:
- *
- * - Protocol version
- * - HTTP method
- * - URI
- * - Headers
- * - Message body
- *
- * During construction, implementations MUST attempt to set the Host header from
- * a provided URI if no Host header is provided.
- *
- * Requests are considered immutable; all methods that might change state MUST
- * be implemented such that they retain the internal state of the current
- * message and return an instance that contains the changed state.
- */
+
 class Request extends AbstractMessage implements RequestInterface
 {
     /**
@@ -57,29 +39,14 @@ class Request extends AbstractMessage implements RequestInterface
      * @param string
      * @param UrilInterface
      * @param 
-     * @param
+     * @param 
      */
-    public function __construct($server, $uri = null, $body = null, $version = '1.1')
+    public function __construct($method, $uri, $headers = [], $body = null, $version = '1.1')
     {
-        $this->method = strtolower($server['REQUEST_METHOD']);
+        $this->method = strtolower($method);
         $this->protocolVersion = (string) $version;
-        $this->setHeaders(headers_list());
-
-        if (is_null($uri) && $uri == false) {
-
-            $uri = sprintf(
-                "%s://%s%s%s", 
-                $server['REQUEST_SCHEME'], 
-                $server['HTTP_HOST'], 
-                $server['REQUEST_URI'], 
-                $server['QUERY_STRING'] ?? null
-            );
-            
-            $this->setUri($uri);
-        } else {
-            $this->setUri($uri);
-        }
-
+        $this->setHeaders($headers);
+        $this->getUri($uri);
         $this->setBody($body);
     }
 
@@ -123,6 +90,13 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function withRequestTarget($requestTarget)
     {
+
+        if (preg_match('#\s#', $requestTarget)) {
+            throw new InvalidArgumentException(
+                'Invalid request target provided; cannot contain whitespace'
+            );
+        }
+
         $new = clone $this;
         $new->requestTarget = $requestTarget;
         return $new;
@@ -168,7 +142,7 @@ class Request extends AbstractMessage implements RequestInterface
         }
 
         $new = clone $this;
-        $new->method = $method;
+        $new->method = strtolower($method);
         return $new;
 
     }

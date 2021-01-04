@@ -361,7 +361,10 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
+     * 
      * Set headers
+     * 
+     * {@inheritdoc}
      * 
      * @param array of headers
      * @return array;
@@ -383,6 +386,7 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
+     * {@inheritdoc}
      * 
      * @return void
      */
@@ -396,6 +400,7 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
+     * {@inheritdoc}
      * 
      * @return void
      */
