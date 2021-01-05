@@ -199,7 +199,14 @@ final class Response extends AbstractMessage implements ResponseInterface
      */
     public function __construct($code, $body = '', $headers = [], $version = '1.1')
     {
-        $this->status = $this->isNumericParam($code);
+
+        $code = $this->isNumericParam($code);
+
+        if (!in_array($code, array_keys($this->http_status_codes))) {
+            throw new InvalidArgumentException(sprintf("%s does not exists in http_status_code.", $code));
+        }
+        
+        $this->status = $code;
         $this->reasonPhrase = $this->http_status_codes[$this->status];
         $this->protocolVersion = (string) $version;
 
