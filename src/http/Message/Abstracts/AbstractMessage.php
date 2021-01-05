@@ -375,12 +375,17 @@ abstract class AbstractMessage implements MessageInterface
         foreach ($headers as $headerKey => $header) {
 
             $key = strtolower($headerKey);
-            $value = strtolower($header);
-        
-            if (is_string($value)) {
+
+            if (is_string($header)) {
+                
+                $value = strtolower($header);
                 $this->headers[$key] = explode(',', $value);
+            
             } else {
+
+                $value = array_map('strtolower', $header);
                 $this->headers[$key] = $value;
+            
             }
         }
     }
@@ -442,6 +447,8 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function defaultHeader()
     {
-
+        return [
+            'Content-Type' => [ 'text/html; charset=UTF-8', 'multipart/form-data']
+        ];
     }
 }

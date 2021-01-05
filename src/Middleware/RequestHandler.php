@@ -1,14 +1,25 @@
 <?php
 namespace Middleware;
 
-// use Psr\Http\Message\ResponseInterface;
-// use Psr\Http\Server\RequestHandlerInterface;
-// use Http\Message\Interfaces\UdServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
-// class RequestHandler implements RequestHandlerInterface
-// {
-//     public function handle(UdServerRequestInterface $serverRequest)
-//     {
+/**
+ * Handles a server request and produces a response.
+ *
+ * An HTTP request handler process an HTTP request in order to produce an
+ * HTTP response.
+ */
+class RequestHandler implements RequestHandlerInterface
+{
+    /**
+     * Handles a request and produces a response.
+     *
+     * May call other collaborating code to generate the response.
+     */
+    public function handle(ServerRequestInterface $serverRequest): ResponseInterface
+    {
         
-//     }
-// }
+    }
+}

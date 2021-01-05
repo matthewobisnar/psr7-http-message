@@ -1,9 +1,10 @@
 <?php
-namespace Middleware\Interfaces;
+namespace Middleware;
 
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Participant in processing a server request and response.
@@ -12,7 +13,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-interface MiddlewareInterface
+
+class RequestMiddleware implements MiddlewareInterface
 {
     /**
      * Process an incoming server request.
@@ -21,5 +23,8 @@ interface MiddlewareInterface
      * If unable to produce the response itself, it may delegate to the provided
      * request handler to do so.
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface;
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        
+    }
 }

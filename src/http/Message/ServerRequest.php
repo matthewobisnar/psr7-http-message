@@ -127,7 +127,7 @@ class ServerRequest extends AbstractMessage implements UdServerRequestInterface
         );
 
         $this->setUri($uri);
-        $this->setHeaders($headers);
+        $this->setHeaders($this->defaultHeader());
         $this->setBody($body);
     }
 
@@ -312,6 +312,8 @@ class ServerRequest extends AbstractMessage implements UdServerRequestInterface
     }
 
     /**
+     * {@inheritdoc}
+     * 
      * @return Boolean
      */
     protected function isPost()
@@ -337,6 +339,8 @@ class ServerRequest extends AbstractMessage implements UdServerRequestInterface
     }
 
     /**
+     * {@inheritdoc}
+     * 
      * @param string
      * @param string
      * @return array

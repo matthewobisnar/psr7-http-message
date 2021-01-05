@@ -212,7 +212,7 @@ class Uri implements UriInterface
         return rawurlencode($matches[0]);
     }
 
-        /**
+    /**
      * Filters the query
      *
      * @param mixed $query
@@ -374,7 +374,7 @@ class Uri implements UriInterface
     public function getPath()
     {
        $path = preg_replace('/^[\/]*/', "/", $this->php_url_path);
-        return $path;
+       return $path;
     }
 
     /**
