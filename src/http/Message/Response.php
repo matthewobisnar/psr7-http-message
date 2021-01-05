@@ -251,7 +251,7 @@ final class Response extends AbstractMessage implements ResponseInterface
     {
         $code = $this->isNumericParam($code);
 
-        if (!array_key_exists($code, $this->http_status_codes)) {
+        if (!array_key_exists($code, array_keys($this->http_status_codes))) {
             throw new InvalidArgumentException(sprintf("Invalid response status code. Status code does not exists."));
         }
 
